@@ -32,6 +32,11 @@ DATABASES = {
         },
     }
 }
+INSTALLED_APPS = [
+
+    'corsheaders',
+
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -58,6 +63,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,7 +74,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'dj.urls'
-
+CORS_ALLOWED_ORIGINS = [
+    "https://fitcenter.vercel.app",
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

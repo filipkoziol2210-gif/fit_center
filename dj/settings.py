@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from urllib.parse import urlparse
@@ -20,17 +20,11 @@ from urllib.parse import urlparse
 tmp_uri = urlparse(os.environ.get("DATABASE_URL"))
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': tmp_uri.path[1:],
-        'USER': tmp_uri.username,
-        'PASSWORD': tmp_uri.password,
-        'HOST': tmp_uri.hostname,
-        'PORT': tmp_uri.port,
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 INSTALLED_APPS = [
 
@@ -102,12 +96,7 @@ WSGI_APPLICATION = 'dj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 
 # Password validation

@@ -48,6 +48,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,7 +71,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'dj.urls'
 CORS_ALLOWED_ORIGINS = [
-    "https://fitcenter.vercel.app",
+    "https://fit-center-front-one.vercel.app/",
 ]
 TEMPLATES = [
     {

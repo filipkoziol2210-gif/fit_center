@@ -1,11 +1,15 @@
 from django.http import JsonResponse
-from .models import User
-import traceback
+from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 import json
+import traceback
+
 def api_users(request):
     try:
-        users = list(User.objects.values('id', 'email', 'role'))
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT id, email, role FROM nazwa_tabeli_uzytkownikow")
+            columns = [col[0] for col in cursor.description]
+            users = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return JsonResponse({'users': users})
     except Exception as e:
         return JsonResponse({
@@ -22,9 +26,14 @@ def api_login(request):
             email = data.get('email')
             password = data.get('password')
 
-            user = User.objects.filter(email=email).first()
-            if user and user.password == password:
-                return JsonResponse({'success': True})
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id, email, password, role FROM users WHERE email = %s", [email])
+                row = cursor.fetchone()
+
+                if row:
+                    db_password = row[2]
+                    if db_password == password:
+                        return JsonResponse({'success': True})
 
             return JsonResponse({'success': False, 'error': 'Nieprawidłowy e-mail lub hasło'}, status=400)
         except Exception as e:

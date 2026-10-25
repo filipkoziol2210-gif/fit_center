@@ -71,7 +71,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'dj.urls'
 CORS_ALLOWED_ORIGINS = [
-    "https://fit-center-front-one.vercel.app/",
+    "https://fit-center-front-one.vercel.app",
 ]
 TEMPLATES = [
     {

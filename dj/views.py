@@ -27,7 +27,7 @@ def api_login(request):
             password = data.get('password')
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, email, password, role FROM users WHERE email = %s", [email])
+                cursor.execute("SELECT id, email, password_hash, role FROM users WHERE email = %s", [email])
                 row = cursor.fetchone()
 
                 if row:

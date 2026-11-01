@@ -40,3 +40,31 @@ def api_login(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+@csrf_exempt
+def api_register(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            name = data.get('name')
+            email = data.get('email')
+            password = data.get('password')
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM users WHERE email = %s", [email])
+                existing_user = cursor.fetchone()
+
+                if existing_user:
+                    return JsonResponse({'success': False, 'error': 'Użytkownik o takim e-mailu już istnieje'}, status=400)
+
+                cursor.execute(
+                    "INSERT INTO users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
+                    [name, email, password, 'user']
+                )
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Method not allowed'}, status=405)

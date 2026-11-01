@@ -59,8 +59,8 @@ def api_register(request):
                     return JsonResponse({'success': False, 'error': 'Użytkownik o takim e-mailu już istnieje'}, status=400)
 
                 cursor.execute(
-                    "INSERT INTO users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
-                    [name, email, password, 'user']
+                    "INSERT INTO users ( email, password_hash, role) VALUES (%s, %s, %s, %s)",
+                    [ email, password, 'user']
                 )
                 connection.commit()
 

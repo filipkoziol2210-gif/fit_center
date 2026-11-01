@@ -7,7 +7,7 @@ import traceback
 def api_users(request):
     try:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT id, email, role FROM nazwa_tabeli_uzytkownikow")
+            cursor.execute("SELECT id, email, role FROM users")
             columns = [col[0] for col in cursor.description]
             users = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return JsonResponse({'users': users})
@@ -37,7 +37,7 @@ def api_login(request):
 
             return JsonResponse({'success': False, 'error': 'Nieprawidłowy e-mail lub hasło'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({'error': str(e), 'traceback': traceback.format_exc()}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
@@ -62,9 +62,10 @@ def api_register(request):
                     "INSERT INTO users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
                     [name, email, password, 'user']
                 )
+                connection.commit()
 
             return JsonResponse({'success': True})
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({'error': str(e), 'traceback': traceback.format_exc()}, status=500)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)

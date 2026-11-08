@@ -244,12 +244,16 @@ def api_meals(request):
         with transaction.atomic():
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "DELETE FROM meals WHERE id = %s AND user_id = %s RETURNING id",
+                    "SELECT id FROM meals WHERE id = %s AND user_id = %s FOR UPDATE",
                     [meal_id, user_id],
                 )
                 if not cursor.fetchone():
                     return _error("Nie znaleziono posiłku.", 404)
                 cursor.execute("DELETE FROM meal_entries WHERE meal_id = %s", [meal_id])
+                cursor.execute(
+                    "DELETE FROM meals WHERE id = %s AND user_id = %s",
+                    [meal_id, user_id],
+                )
         return JsonResponse({"success": True})
     except Exception:
         return _server_error("Nie udało się usunąć posiłku.")

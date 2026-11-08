@@ -16,5 +16,6 @@ urlpatterns = [
     path("api/exercises/", views.api_exercises, name="api_exercises"),
     path("api/calories/", diet_views.api_calories, name="api_calories"),
     path("api/meals/", diet_views.api_meals, name="api_meals"),
+    path("api/foods/", diet_views.api_foods, name="api_foods"),
     path("api/macros/", diet_views.api_macros, name="api_macros"),
 ]

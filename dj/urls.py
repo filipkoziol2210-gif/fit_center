@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, diet_views, diet_macro_views
 
 urlpatterns = [
     path("api/csrf/", views.api_csrf, name="api_csrf"),
@@ -14,7 +14,8 @@ urlpatterns = [
     path("api/workouts/", views.api_workouts, name="api_workouts"),
     path("api/workout-sets/", views.api_workout_sets, name="api_workout_sets"),
     path("api/exercises/", views.api_exercises, name="api_exercises"),
-    path("api/calories/", views.api_calories, name="api_calories"),
-    path("api/meals/", views.api_meals, name="api_meals"),
-    path("api/macros/", views.api_macros, name="api_macros"),
+    path("api/calories/", diet_views.api_calories, name="api_calories"),
+    path("api/meals/", diet_views.api_meals, name="api_meals"),
+    path("api/foods/", diet_views.api_foods, name="api_foods"),
+    path("api/macros/", diet_macro_views.api_macros, name="api_macros"),
 ]

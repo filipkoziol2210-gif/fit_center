@@ -1,0 +1,15 @@
+BACKEND – Fit Center
+
+Ten katalog jest kompletną zawartością repozytorium backendowego.
+
+W Render wymagane są:
+- SECRET_KEY: losowy, tajny klucz Django.
+- DATABASE_URL: connection string Neon PostgreSQL.
+- DEBUG=False.
+
+FRONTEND_URL domyślnie wskazuje https://fit-center-front-one.vercel.app.
+
+Po wdrożeniu uruchom migracje Django:
+python manage.py migrate
+
+Nie usuwaj i nie odtwarzaj bazy Neon.

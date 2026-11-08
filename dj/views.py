@@ -95,6 +95,34 @@ def api_csrf(request):
 
 
 @require_GET
+def api_session(request):
+    """Zwraca stan zalogowania na podstawie cookie sesji."""
+    user_id = _session_user_id(request)
+    if user_id is None:
+        return JsonResponse({"authenticated": False})
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT email, role FROM users WHERE id = %s LIMIT 1",
+                [user_id],
+            )
+            row = cursor.fetchone()
+
+        if not row:
+            request.session.flush()
+            return JsonResponse({"authenticated": False})
+
+        return JsonResponse({
+            "authenticated": True,
+            "email": row[0],
+            "role": row[1],
+        })
+    except Exception:
+        return _server_error("Nie udało się sprawdzić sesji użytkownika.")
+
+
+@require_GET
 def api_users(request):
     """Lista użytkowników jest dostępna wyłącznie dla administratora."""
     if _session_user_id(request) is None:

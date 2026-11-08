@@ -2,7 +2,7 @@ import json
 import logging
 import secrets
 from functools import wraps
-
+from django.middleware.csrf import get_token
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import IntegrityError, connection, transaction
 from django.http import JsonResponse
@@ -88,8 +88,10 @@ def _set_session(request, user_id, role):
 @require_GET
 @ensure_csrf_cookie
 def api_csrf(request):
-    """Ustawia cookie CSRF przed pierwszym żądaniem POST/PUT/DELETE z Reacta."""
-    return JsonResponse({"success": True})
+    return JsonResponse({
+        "success": True,
+        "csrfToken": get_token(request)
+    })
 
 
 @require_GET

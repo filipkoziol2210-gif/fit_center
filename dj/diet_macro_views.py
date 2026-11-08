@@ -126,9 +126,9 @@ def api_macros(request):
                         target_fat_g = EXCLUDED.target_fat_g,
                         target_carbs_g = EXCLUDED.target_carbs_g,
                         updated_at = CURRENT_TIMESTAMP
+                    RETURNING target_calories
                 """, [user_id, protein, fat, carbs, protein, fat, carbs])
-
-        target_calories = round(protein * 4 + fat * 9 + carbs * 4)
+                target_calories = cursor.fetchone()[0]
         return JsonResponse({
             "success": True,
             "targetCalories": target_calories,

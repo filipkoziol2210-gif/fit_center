@@ -271,7 +271,7 @@ def api_calories(request):
                     [meal_id, food_id]
                 )
                 connection.commit()
-            return JsonResponse({'success': True})
+            return JsonResponse({'success': True, 'id': food_id})
         except Exception as e:
             return JsonResponse({'error': str(e), 'traceback': traceback.format_exc()}, status=500)
 

@@ -66,7 +66,10 @@ CSRF_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = False
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+# Długa, odnawiana sesja. Cookie pozostaje po zamknięciu przeglądarki;
+# standardowo kończy się dopiero po 10 latach braku aktywności.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365 * 10
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Render terminates HTTPS before forwarding traffic to Django.

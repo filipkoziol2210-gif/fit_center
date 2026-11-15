@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 from . import diet_views
 from . import diet_macro_views
+from . import training_views
 
 urlpatterns = [
     path("api/csrf/", views.api_csrf, name="api_csrf"),
@@ -13,9 +14,10 @@ urlpatterns = [
     path("api/logout/", views.api_logout, name="api_logout"),
     path("api/profile/", views.api_profile, name="api_profile"),
     path("api/body-measurements/", views.api_body_measurements, name="api_body_measurements"),
-    path("api/workouts/", views.api_workouts, name="api_workouts"),
-    path("api/workout-sets/", views.api_workout_sets, name="api_workout_sets"),
-    path("api/exercises/", views.api_exercises, name="api_exercises"),
+    path("api/workouts/", training_views.api_workouts, name="api_workouts"),
+    path("api/workout-sets/", training_views.api_workout_sets, name="api_workout_sets"),
+    path("api/exercises/", training_views.api_exercises, name="api_exercises"),
+    path("api/routines/", training_views.api_routines, name="api_routines"),
     path("api/foods/", diet_views.api_foods, name="api_foods"),
     path("api/calories/", diet_views.api_calories, name="api_calories"),
     path("api/meals/", diet_views.api_meals, name="api_meals"),

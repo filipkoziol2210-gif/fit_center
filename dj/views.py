@@ -77,7 +77,7 @@ def _set_session(request, user_id, role):
     request.session.flush()
     request.session["user_id"] = int(user_id)
     request.session["role"] = role
-    request.session.set_expiry(60 * 60 * 24 * 14)  # 14 dni
+    request.session.set_expiry(None)  # korzysta z długiego SESSION_COOKIE_AGE z settings.py
 
 
 # ---------------------------------------------------------------------------

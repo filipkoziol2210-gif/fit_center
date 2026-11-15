@@ -359,7 +359,7 @@ def api_body_measurements(request):
 # ---------------------------------------------------------------------------
 
 
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET", "POST", "DELETE"])
 @require_session
 def api_workouts(request):
     user_id = _session_user_id(request)
@@ -381,6 +381,28 @@ def api_workouts(request):
             return JsonResponse({"workouts": workouts})
         except Exception:
             return _server_error("Nie udało się pobrać treningów.")
+
+    if request.method == "DELETE":
+        workout_id = request.GET.get("id")
+        if not workout_id:
+            return _error("Brak identyfikatora treningu.")
+        try:
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "SELECT id FROM workouts WHERE id = %s AND user_id = %s",
+                        [workout_id, user_id],
+                    )
+                    if not cursor.fetchone():
+                        return _error("Nie znaleziono treningu.", status=404)
+                    cursor.execute("DELETE FROM workout_sets WHERE workout_id = %s", [workout_id])
+                    cursor.execute(
+                        "DELETE FROM workouts WHERE id = %s AND user_id = %s",
+                        [workout_id, user_id],
+                    )
+            return JsonResponse({"success": True})
+        except Exception:
+            return _server_error("Nie udało się usunąć treningu.")
 
     try:
         data = _read_json(request)
